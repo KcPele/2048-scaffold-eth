@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import tryagainlogo from "~~/assets/img/try-again.gif";
-import { Board } from "~~/helper";
 
 const GameOverlay = ({ OnRestart, board }: { OnRestart: () => void; board: any }) => {
   if (board.hasWon()) {
