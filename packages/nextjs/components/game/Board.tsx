@@ -123,7 +123,7 @@ const BoardView = () => {
               <span> {board.score}</span>
             </div>
           </div>
-          {account.address && gameData?.player === account.address ? (
+          {gameData?.player === account.address ? (
             <>
               <div className="relative rounded-md  h-[440px] mx-auto max-w-[440px] w-full">
                 {cells}
@@ -148,7 +148,10 @@ const BoardView = () => {
           )}
         </>
       ) : (
-        <p>loading </p>
+        <div className="text-center">
+          <p>loading </p>
+          <p>Connect you wallet to play the game</p>
+        </div>
       )}
     </div>
   );
