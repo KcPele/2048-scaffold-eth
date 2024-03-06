@@ -13,8 +13,6 @@ function rotateLeft(matrix: Tile[][]): Tile[][] {
   return res;
 }
 
-type Direction = 0 | 1 | 2 | 3;
-
 class Tile {
   value: number;
   row: number;
@@ -23,10 +21,10 @@ class Tile {
   oldColumn: number;
   markForDeletion: boolean;
   mergedInto: Tile | null;
-  static idCounter: number = 0;
+  static idCounter = 0;
   id: number;
 
-  constructor(value: number = 0, row: number = -1, column: number = -1) {
+  constructor(value = 0, row = -1, column = -1) {
     this.value = value;
     this.row = row;
     this.column = column;
@@ -87,7 +85,7 @@ class Board {
     this.cells = [];
     this.score = 0;
     this.size = 4;
-    this.fourProbability = 0.1;
+    this.fourProbability = 0.5;
     this.deltaX = [-1, 0, 1, 0];
     this.deltaY = [0, -1, 0, 1];
     this.won = false;
@@ -101,24 +99,24 @@ class Board {
     this.setPositions();
   }
 
-  addTile(value: number = 0): Tile {
+  addTile(value = 0): Tile {
     const tile = new Tile(value);
     this.tiles.push(tile);
     return tile;
   }
 
   moveLeft() {
-    var hasChanged = false;
-    for (var row = 0; row < this.size; ++row) {
-      var currentRow = this.cells[row].filter(tile => tile.value !== 0);
-      var resultRow = [];
-      for (var target = 0; target < this.size; ++target) {
-        var targetTile = currentRow.length > 0 ? currentRow.shift()! : this.addTile();
+    let hasChanged = false;
+    for (let row = 0; row < this.size; ++row) {
+      const currentRow = this.cells[row].filter(tile => tile.value !== 0);
+      const resultRow = [];
+      for (let target = 0; target < this.size; ++target) {
+        let targetTile = currentRow.length > 0 ? currentRow.shift()! : this.addTile();
         if (currentRow.length > 0 && currentRow[0].value === targetTile.value) {
-          var tile1 = targetTile;
+          const tile1 = targetTile;
           targetTile = this.addTile(targetTile.value * 2);
           tile1.mergedInto = targetTile;
-          var tile2 = currentRow.shift()!;
+          const tile2 = currentRow.shift()!;
           tile2.mergedInto = targetTile;
           this.score += targetTile.value;
         }
@@ -146,26 +144,26 @@ class Board {
     });
   }
   addRandomTile() {
-    var emptyCells = [];
-    for (var r = 0; r < this.size; ++r) {
-      for (var c = 0; c < this.size; ++c) {
+    const emptyCells = [];
+    for (let r = 0; r < this.size; ++r) {
+      for (let c = 0; c < this.size; ++c) {
         if (this.cells[r][c].value === 0) {
           emptyCells.push({ r: r, c: c });
         }
       }
     }
-    var index = ~~(Math.random() * emptyCells.length);
-    var cell = emptyCells[index];
-    var newValue = Math.random() < this.fourProbability ? 4 : 2;
+    const index = ~~(Math.random() * emptyCells.length);
+    const cell = emptyCells[index];
+    const newValue = Math.random() < this.fourProbability ? 4 : 2;
     this.cells[cell.r][cell.c] = this.addTile(newValue);
   }
   move(direction: number) {
     // 0 -> left, 1 -> up, 2 -> right, 3 -> down
     this.clearOldTiles();
-    for (var i = 0; i < direction; ++i) {
+    for (let i = 0; i < direction; ++i) {
       this.cells = rotateLeft(this.cells);
     }
-    var hasChanged = this.moveLeft();
+    const hasChanged = this.moveLeft();
     for (let i = direction; i < 4; ++i) {
       this.cells = rotateLeft(this.cells);
     }
@@ -191,8 +189,8 @@ class Board {
         // Directly assigning boolean expressions to canMove
         canMove = canMove || this.cells[row][column].value === 0;
         for (let dir = 0; dir < 4; ++dir) {
-          let newRow = row + this.deltaX[dir];
-          let newColumn = column + this.deltaY[dir];
+          const newRow = row + this.deltaX[dir];
+          const newColumn = column + this.deltaY[dir];
           if (newRow < 0 || newRow >= this.size || newColumn < 0 || newColumn >= this.size) {
             continue;
           }
